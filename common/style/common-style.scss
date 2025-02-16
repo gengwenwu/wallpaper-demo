@@ -1,4 +1,8 @@
-view{
+view, swiper, swiper-item{
+	// 1, box-sizing 属性有两个主要的值：content-box(默认) 和 border-box。
+	//    (1), content-box(默认值)：宽高，这些值仅应用于内容区，不包含padding和border。
+	// 	  (2), border-box：宽高，这些值包含内容区、padding和border，简称内填充。
 	box-sizing: border-box;
+	
 	// border: 1px solid red;
 }
