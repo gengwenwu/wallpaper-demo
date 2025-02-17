@@ -29,6 +29,7 @@
 		<!--  每日推荐 -->
 		<view class="select">
 			<common-title>
+				<!-- name 是具名方式 -->
 				<template #name>每日推荐</template>
 				<template #custom>
 					<view class="date">
@@ -59,7 +60,7 @@
 
 			<view class="content">
 				<them-item v-for="item in 8"></them-item>
-				<them-item isMore="true"></them-item>
+				<them-item :isMore="true"></them-item>
 			</view>
 		</view>
 
@@ -91,7 +92,7 @@
 				width: 750rpx;
 				height: 340rpx;
 
-				// &是省略写法，代表的是父的swiper，全写应该是 swiper-item
+				// &是省略写法，代表的是自己，既swiper，全写应该是 swiper-item
 				&-item {
 					width: 100%;
 					height: 100%;
@@ -136,6 +137,8 @@
 			}
 
 			.center {
+				// flex: 1表示占据剩余的宽度。
+				// 既 .left 和 .right 占据部分 width 后，剩下的部分宽度都给 .center 布局。
 				flex: 1;
 
 				swiper {
@@ -226,6 +229,7 @@
 				display: grid;
 				// 间隔
 				gap: 15rpx;
+				// 网格，横向3个，
 				grid-template-columns: repeat(3, 1fr);
 			}
 		}

@@ -22,7 +22,7 @@
 		// 可以使用 justify-content 属性定义子元素在主轴上的对齐方式和分布规则。
 		// space-between 表示两端对其。
 		justify-content: space-between;
-		// 垂直居中
+		// 与主轴对立的交叉轴上的对齐方式，居中，这里是垂直居中
 		align-items: center;
 		padding: 0 30rpx;
 
