@@ -1,5 +1,5 @@
 <template>
-	<view class="classLayout">
+	<view class="classLayout pageBg">
 		<view class="classify">
 			<them-item v-for="item in 15">
 
@@ -16,6 +16,7 @@
 	.classify {
 		paddding: 30rpx;
 		display: grid;
+		// 一行显示3个，每个平铺满
 		grid-template-columns: repeat(3, 1fr);
 		gap: 15rpx;
 	}

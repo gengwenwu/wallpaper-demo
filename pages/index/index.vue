@@ -1,5 +1,5 @@
 <template>
-	<view class="homeLayout">
+	<view class="homeLayout pageBg">
 		<!-- 头部banner -->
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" circular
@@ -13,7 +13,7 @@
 		<!-- 通知 -->
 		<view class="notice">
 			<view class="left">
-				<uni-icons type="sound-filled" size="20" color="#28b389" />
+				<uni-icons type="sound-filled" size="20" />
 				<text class="text">公告</text>
 			</view>
 			<view class="center">
@@ -33,7 +33,7 @@
 				<template #name>每日推荐</template>
 				<template #custom>
 					<view class="date">
-						<uni-icons type="calendar" size="18" color="#28b389" />
+						<uni-icons type="calendar" size="18" />
 						<view class="text">
 							<uni-dateformat :date="Date.now()" format="dd日" />
 						</view>
@@ -129,8 +129,14 @@
 				align-items: center;
 				justify-content: center;
 
+				:deep() {
+					.uni-icons {
+						color: $brand-theme-color !important;
+					}
+				}
+
 				.text {
-					color: #28b389;
+					color: $brand-theme-color;
 					font-weight: 600;
 					font-size: 28rpx;
 				}
@@ -174,9 +180,19 @@
 			padding-top: 50rpx;
 
 			.date {
-				color: #28b389;
+				color: $brand-theme-color;
 				display: flex;
 				align-items: center;
+
+				// :deep() 是vue3 语法，穿透组件内部，修改样式。
+				// 否则，下面的 .uni-icons 样式，在小程序中不生效
+				:deep() {
+					.uni-icons {
+						// 添加 !important，样式权重最高
+						color: $brand-theme-color !important;
+					}
+				}
+
 
 				.text {
 					margin-left: 5rpx;

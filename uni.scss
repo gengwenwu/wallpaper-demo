@@ -14,6 +14,11 @@
 
 /* 颜色变量 */
 
+// 引入自定义 scss 样式，注意，结尾一定要使用英文;结尾
+// 这里的@表示根目录
+@import "@/common/style/base-style.scss";
+
+
 /* 行为相关颜色 */
 $uni-color-primary: #007aff;
 $uni-color-success: #4cd964;
