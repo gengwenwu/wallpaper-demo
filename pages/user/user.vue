@@ -12,7 +12,7 @@
 		<!-- 第1块区域 -->
 		<view class="section">
 			<view class="list">
-				<view class="row">
+				<view class="row" @click="go2ClassList">
 					<view class="left">
 						<uni-icons type="download-filled" size="20"></uni-icons>
 						<text class="text">我的下载</text>
@@ -22,7 +22,7 @@
 						<uni-icons type="right" size="20" color="#aaa"></uni-icons>
 					</view>
 				</view>
-				<view class="row">
+				<view class="row" @click="go2ClassList">
 					<view class="left">
 						<uni-icons type="star-filled" size="20"></uni-icons>
 						<text class="text">我的评分</text>
@@ -86,6 +86,12 @@
 		// 拨打电话，官方文档：api -> 设备， https://uniapp.dcloud.net.cn/api/system/phone.html
 		uni.makePhoneCall({
 			phoneNumber: "114"
+		})
+	}
+
+	const go2ClassList = () => {
+		uni.navigateTo({
+			url: "/pages/classlist/classlist"
 		})
 	}
 </script>
@@ -160,9 +166,10 @@
 					.left {
 						display: flex;
 						align-items: center;
-						:deep(){
-							.uni-icons{
-								color:$brand-theme-color !important;
+
+						:deep() {
+							.uni-icons {
+								color: $brand-theme-color !important;
 							}
 						}
 

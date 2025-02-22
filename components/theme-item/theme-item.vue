@@ -1,14 +1,14 @@
 <template>
 	<view class="themeItem">
 		<!-- 正常图片 -->
-		<navigator url="" class="box" v-if="!isMore">
+		<navigator url="/pages/classlist/classlist" class="box" v-if="!isMore">
 			<image class="pic" src="/common/images/classify1.jpg" mode="aspectFill" />
 			<view class="mask">明星美女</view>
 			<view class="tab">3天前更新</view>
 		</navigator>
 
 		<!-- 更多 -->
-		<navigator url="" class="box more" v-else>
+		<navigator url="/pages/classify/classify" open-type="reLaunch" class="box more" v-else>
 			<image class="pic" src="/common/images/more.jpg" mode="aspectFill" />
 			<view class="mask">
 				<uni-icons type="more-filled" size="34" color="#fff" />
@@ -63,7 +63,7 @@
 				// 磨砂效果，模糊度与透明度也有关系的，譬如这里0.2
 				backdrop-filter: blur(20rpx);
 				background: rgba(0, 0, 0, 0.2);
-				
+
 				font-weight: 600;
 				font-size: 30rpx;
 			}

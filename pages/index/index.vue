@@ -59,8 +59,8 @@
 			</common-title>
 
 			<view class="content">
-				<them-item v-for="item in 8"></them-item>
-				<them-item :isMore="true"></them-item>
+				<theme-item v-for="item in 8"></theme-item>
+				<theme-item :isMore="true"></theme-item>
 			</view>
 		</view>
 
