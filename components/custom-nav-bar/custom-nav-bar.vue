@@ -2,9 +2,9 @@
 	<view class="layout">
 		<view class="navbar">
 			<!-- 1，系统头部bar，设置bar高度即可 -->
-			<view class="statusBar" :style="{height:statusBarHeight + 'px'}"></view>
+			<view class="statusBar" :style="{height:getStatusBarHeight() + 'px'}"></view>
 			<!-- 2，自定义bar头部 -->
-			<view class="titleBar">
+			<view class="titleBar" :style="{height: getTitleBarHeight()+'px'}">
 				<view class="title">标题</view>
 				<view class="search">
 					<uni-icons class="icon" type="search" color="#888" size="18"></uni-icons>
@@ -13,7 +13,7 @@
 			</view>
 		</view>
 
-		<view class="fill" :style="{height: statusBarHeight+titleBarHeight+'px'}">
+		<view class="fill" :style="{height:getNaBarHeight() + 'px'}">
 
 		</view>
 	</view>
@@ -24,36 +24,11 @@
 		ref
 	} from "vue"
 
-	// uniapp api-》设备 https://uniapp.dcloud.net.cn/api/system/info.html
-	let SYSTEM_INFO = uni.getSystemInfoSync();
-	console.log(SYSTEM_INFO);
-
-	// #ifdef APP| H5
-	let statusBarHeight = 10
-	// #endif
-	// #ifndef APP| H5
-	// 状态栏高度 (适配手机、小程序设备)，h5看不出来变化
-	let statusBarHeight = ref(SYSTEM_INFO.statusBarHeight);
-	// #endif
-
-	// #ifdef APP| H5
-	let titleBarHeight = 20
-	// #endif
-	// #ifndef APP| H5
-	// 获取小程序头部下该菜单按钮的布局位置信息，注意：getMenuButtonBoundingClientRect() api， app和h5不支持
-	let MENU_BUTTON = uni.getMenuButtonBoundingClientRect();
-	console.log(MENU_BUTTON);
-
-	// 解构对象，计算头部高度
-	let {
-		top,
-		height
-	} = uni.getMenuButtonBoundingClientRect();
-	// *2，是因为胶囊按钮上下边距，有2个，height是胶囊按钮高度
-	let titleBarHeight = ref((top - statusBarHeight.value) * 2 + height);
-	// #endif
-
-	console.log("titleBarHeight:", titleBarHeight);
+	import {
+		getStatusBarHeight,
+		getTitleBarHeight,
+		getNaBarHeight
+	} from "@/utils/system.js"
 </script>
 
 <style lang="scss" scoped>
