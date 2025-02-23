@@ -79,8 +79,8 @@
 
 	import {
 		apiGetBanner,
-		apiGetDayRandom//,
-		// apiGetNotice
+		apiGetDayRandom,
+		apiGetNotice
 	} from "../../api/apis.js"
 
 	// const bannerList = [
@@ -102,39 +102,27 @@
 
 	// 请求banner
 	const getBanner = async () => {
-		let res = await apiGetBanner();
-		bannerList.value = res.data.data
+		let data = await apiGetBanner();
+		bannerList.value = data.data
 	}
 
 	// 请求每日推荐
 	const getDayRandom = async () => {
-		let res = await apiGetDayRandom();
-		randomList.value = res.data.data
+		let data = await apiGetDayRandom();
+		randomList.value = data.data
 	}
 
 	// 请求公告
 	const getNotice = async () => {
-		let res = await uni.request({
-			url: "https://tea.qingnian8.com/api/bizhi/wallNewsList",
-			// header: {
-			// 	 "access-key": ""
-			// }
-			data: {
-				select: true,
-				pageSize: 3
-			}
-		})
-
-		if (res.data.errCode === 0) {
-			noticeList.value = res.data.data
-		} else {
-			console.log(res)
-		}
+		let data = await apiGetNotice({
+			select: true
+		});
+		noticeList.value = data.data
 	}
 
 	getBanner()
 	getDayRandom()
-	// getNotice()
+	getNotice()
 
 	// 预览
 	const goPreview = () => {

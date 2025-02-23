@@ -17,9 +17,10 @@ export function apiGetDayRandom() {
 	})
 }
 
-// 首页公告
-// export function apiGetNotice() {
-// 	return request({
-// 		url: "/wallNewsList"
-// 	})
-// }
+// 首页公告, data是一个对象，严谨一些设置 {}
+export function apiGetNotice(data = {}) {
+	return request({
+		url: "/wallNewsList",
+		data
+	})
+}

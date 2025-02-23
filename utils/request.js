@@ -7,7 +7,9 @@ export function request(config = {}) {
 	let {
 		url,
 		method = "GET",
-		header = {}
+		// 严谨一些设置空对象 {}
+		header = {},
+		data = {}
 	} = config
 
 	url = BASE_URL + url
@@ -17,13 +19,14 @@ export function request(config = {}) {
 		uni.request({
 			// 参数名与value同名的简写方法
 			url,
+			data,
 			method,
 			header,
 			// 通信成功
 			success: res => {
 				if (res.data.errCode === 0) {
 					// 正确
-					resolve(res)
+					resolve(res.data)
 				} else if (res.data.errCode === 400) {
 					// 自定义error
 					uni.showModal({
