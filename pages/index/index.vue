@@ -21,7 +21,9 @@
 			</view>
 			<view class="center">
 				<swiper vertical autoplay circular duration="300" interval="1500">
-					<swiper-item v-for="item in notices">{{item}}</swiper-item>
+					<swiper-item v-for="item in notices">
+						<navigator url="/pages/notice/detail">{{item}}</navigator>
+					</swiper-item>
 				</swiper>
 			</view>
 			<view class="right">
