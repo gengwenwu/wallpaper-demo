@@ -1,5 +1,8 @@
 <template>
 	<view class="homeLayout pageBg">
+		<!-- 搜索标题 -->
+		<custom-nav-bar></custom-nav-bar>
+		
 		<!-- 头部banner -->
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" circular
