@@ -1,9 +1,9 @@
 //  uniapp api-》设备 https://uniapp.dcloud.net.cn/api/system/info.html
 const SYSTEM_INFO = uni.getSystemInfoSync();
 
-// 获取状态栏高度。状态栏高度 (适配手机、小程序设备)，h5看不出来变化，既：0
+// 获取状态栏高度。状态栏高度 (适配手机、小程序设备)，h5看不出来变化，这里设置了15
 export const getStatusBarHeight = () => {
-	return SYSTEM_INFO.statusBarHeight || 0;
+	return SYSTEM_INFO.statusBarHeight || 15;
 }
 
 // 获取胶囊按钮总高度

@@ -9,7 +9,9 @@
 
 		<!-- 遮罩层 -->
 		<view class="mask" v-if="maskState">
-			<view class="goBack"></view>
+			<view class="goBack" :style="{top:getStatusBarHeight()+'px'}" @click="goBack">
+				<uni-icons type="back" color="#fff" size="20"></uni-icons>
+			</view>
 			<view class="count">3 / 9</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
@@ -110,6 +112,10 @@
 		ref
 	} from "vue"
 
+	import {
+		getStatusBarHeight
+	} from "@/utils/system.js"
+
 	const maskState = ref(true)
 	// info弹窗 (infoPopup与uni-popup的ref值一样)
 	const infoPopup = ref(null)
@@ -148,6 +154,11 @@
 	const submit = () => {
 		console.log("确认评分");
 	}
+
+	// 返回
+	const goBack = () => {
+		uni.navigateBack()
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -185,7 +196,20 @@
 				width: fit-content;
 			}
 
-			.goBack {}
+			.goBack {
+				width: 38px;
+				height: 38px;
+				background: rgba(0, 0, 0, 0.5);
+				left: 30rpx;
+				margin-left: 0;
+				border-radius: 50px;
+				top: 0;
+				backdrop-filter: blur(10rpx);
+				border: 1rpx solid rgba(255, 255, 255, 0.3);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
 			.count {
 				// 距离顶部10%

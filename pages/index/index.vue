@@ -1,8 +1,8 @@
 <template>
 	<view class="homeLayout pageBg">
 		<!-- 搜索标题 -->
-		<custom-nav-bar></custom-nav-bar>
-		
+		<custom-nav-bar title="推荐"></custom-nav-bar>
+
 		<!-- 头部banner -->
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" circular
@@ -45,7 +45,7 @@
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in 8">
+					<view class="box" v-for="item in 8" @click="goPreview">
 						<image src="../../common/images/preview_small.webp" mode="aspectFill" />
 					</view>
 				</scroll-view>
@@ -83,6 +83,13 @@
 		"特朗普，靠谱吗? 美国人民怎么看待这个问题？",
 		"2025，中国经济迎来巨大挑战！"
 	]
+
+	// 预览
+	const goPreview = () => {
+		uni.navigateTo({
+			url: "/pages/preview/preview"
+		})
+	}
 </script>
 
 <style lang="scss" scoped>
