@@ -77,6 +77,12 @@
 		ref
 	} from 'vue'
 
+	import {
+		apiGetBanner,
+		apiGetDayRandom//,
+		// apiGetNotice
+	} from "../../api/apis.js"
+
 	// const bannerList = [
 	// 	"../../common/images/banner1.jpg",
 	// 	"../../common/images/banner2.jpg",
@@ -96,15 +102,6 @@
 
 	// 请求banner
 	const getBanner = async () => {
-		let res = await uni.request({
-			url: "https://tea.qingnian8.com/api/bizhi/homeBanner" //,
-			// header: {
-			// 	 "access-key": ""
-			// }
-		})
-
-		if (res.data.errCode === 0) {
-			bannerList.value = res.data.data
 		} else {
 			console.log(res)
 		}
@@ -146,8 +143,8 @@
 		}
 	}
 
-	// getBanner()
-	// getDayRandom()
+	getBanner()
+	getDayRandom()
 	// getNotice()
 
 	// 预览
