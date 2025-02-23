@@ -7,8 +7,8 @@
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" circular
 				autoplay duration="600" interval="2000">
-				<swiper-item v-for="item in banners">
-					<image :src="item" mode="aspectFill" />
+				<swiper-item v-for="item in bannerList" :key="item._id">
+					<image :src="item.picurl" mode="aspectFill" />
 				</swiper-item>
 			</swiper>
 		</view>
@@ -21,8 +21,8 @@
 			</view>
 			<view class="center">
 				<swiper vertical autoplay circular duration="300" interval="1500">
-					<swiper-item v-for="item in notices">
-						<navigator url="/pages/notice/detail">{{item}}</navigator>
+					<swiper-item v-for="item in noticeList" :key="item._id">
+						<navigator url="/pages/notice/detail">{{item.title}}</navigator>
 					</swiper-item>
 				</swiper>
 			</view>
@@ -47,8 +47,8 @@
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" v-for="item in 8" @click="goPreview">
-						<image src="../../common/images/preview_small.webp" mode="aspectFill" />
+					<view class="box" @click="goPreview" v-for="item in randomList" :key="item._id">
+						<image :src="item.smallPicurl" mode="aspectFill" />
 					</view>
 				</scroll-view>
 			</view>
@@ -73,18 +73,82 @@
 </template>
 
 <script setup>
-	const banners = [
-		"../../common/images/banner1.jpg",
-		"../../common/images/banner2.jpg",
-		"../../common/images/banner3.jpg"
-	]
+	import {
+		ref
+	} from 'vue'
 
-	const notices = [
-		"《挪吒2魔童闹海票》房超过100亿啦,国人的你，有贡献一票吗？",
-		"美国队长4，票房扑街了",
-		"特朗普，靠谱吗? 美国人民怎么看待这个问题？",
-		"2025，中国经济迎来巨大挑战！"
-	]
+	// const bannerList = [
+	// 	"../../common/images/banner1.jpg",
+	// 	"../../common/images/banner2.jpg",
+	// 	"../../common/images/banner3.jpg"
+	// ]
+
+	// const noticeList = [
+	// 	"《挪吒2魔童闹海票》房超过100亿啦,国人的你，有贡献一票吗？",
+	// 	"美国队长4，票房扑街了",
+	// 	"特朗普，靠谱吗? 美国人民怎么看待这个问题？",
+	// 	"2025，中国经济迎来巨大挑战！"
+	// ]
+
+	const bannerList = ref([])
+	const randomList = ref([])
+	const noticeList = ref([])
+
+	// 请求banner
+	const getBanner = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/homeBanner" //,
+			// header: {
+			// 	 "access-key": ""
+			// }
+		})
+
+		if (res.data.errCode === 0) {
+			bannerList.value = res.data.data
+		} else {
+			console.log(res)
+		}
+	}
+
+	// 请求每日推荐
+	const getDayRandom = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/randomWall" //,
+			// header: {
+			// 	 "access-key": ""
+			// }
+		})
+
+		if (res.data.errCode === 0) {
+			randomList.value = res.data.data
+		} else {
+			console.log(res)
+		}
+	}
+
+	// 请求公告
+	const getNotice = async () => {
+		let res = await uni.request({
+			url: "https://tea.qingnian8.com/api/bizhi/wallNewsList",
+			// header: {
+			// 	 "access-key": ""
+			// }
+			data: {
+				select: true,
+				pageSize: 3
+			}
+		})
+
+		if (res.data.errCode === 0) {
+			noticeList.value = res.data.data
+		} else {
+			console.log(res)
+		}
+	}
+
+	// getBanner()
+	// getDayRandom()
+	// getNotice()
 
 	// 预览
 	const goPreview = () => {
