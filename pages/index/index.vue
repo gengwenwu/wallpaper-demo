@@ -102,25 +102,14 @@
 
 	// 请求banner
 	const getBanner = async () => {
-		} else {
-			console.log(res)
-		}
+		let res = await apiGetBanner();
+		bannerList.value = res.data.data
 	}
 
 	// 请求每日推荐
 	const getDayRandom = async () => {
-		let res = await uni.request({
-			url: "https://tea.qingnian8.com/api/bizhi/randomWall" //,
-			// header: {
-			// 	 "access-key": ""
-			// }
-		})
-
-		if (res.data.errCode === 0) {
-			randomList.value = res.data.data
-		} else {
-			console.log(res)
-		}
+		let res = await apiGetDayRandom();
+		randomList.value = res.data.data
 	}
 
 	// 请求公告
