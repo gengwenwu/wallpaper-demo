@@ -24,3 +24,11 @@ export function apiGetNotice(data = {}) {
 		data
 	})
 }
+
+// 首页专题
+export function apiGetClassify(data = {}) {
+	return request({
+		url: "/classify",
+		data
+	})
+}
