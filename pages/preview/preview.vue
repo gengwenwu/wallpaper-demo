@@ -3,7 +3,7 @@
 		<!-- 轮播数字 -->
 		<swiper circular>
 			<swiper-item v-for="item in 5">
-				<image @click="maskChange" src="/common/images/preview1.jpg" mode="aspectFill" />
+				<image @click="maskChange" src="/common/images/preview1.jpg" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 
@@ -18,7 +18,7 @@
 					<uni-icons type="info" size="23"></uni-icons>
 					<view class="text">信息</view>
 				</view>
-				<view class="box">
+				<view class="box" @click="clickScore">
 					<uni-icons type="star" size="23"></uni-icons>
 					<view class="text">5分</view>
 				</view>
@@ -79,6 +79,29 @@
 				</scroll-view>
 			</view>
 		</uni-popup>
+
+		<!-- 评分弹框 https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html -->
+		<uni-popup ref="scorePopup" :is-mask-click="false">
+			<view class="scorePopup">
+				<view class="popHeader">
+					<!-- 这里的空view，是UI占位作用 -->
+					<view></view>
+					<view class="title">壁纸评分</view>
+					<view class="close">
+						<uni-icons @click="clickScoreClose" type="closeempty" size="18" color="#999" />
+					</view>
+				</view>
+				<view class="content">
+					<uni-rate v-model="userScore" allow-half></uni-rate>
+					<text class="text">{{userScore}}分</text>
+				</view>
+				<veiw class="footer">
+					<!-- plain 案例镂空 -->
+					<button @click="submit" :disabled="!userScore" type="default" size="mini" plain>确认评分</button>
+				</veiw>
+			</view>
+		</uni-popup>
+
 	</view>
 </template>
 
@@ -87,21 +110,43 @@
 		ref
 	} from "vue"
 
-	// 遮罩状态
 	const maskState = ref(true)
+	// info弹窗 (infoPopup与uni-popup的ref值一样)
+	const infoPopup = ref(null)
+	// 评分弹窗 (scorePopup与uni-popup的ref值一样)
+	const scorePopup = ref(null)
+	// 用户评分
+	const userScore = ref(0)
+
+	// 遮罩状态
 	const maskChange = () => {
 		maskState.value = !maskState.value
 	}
 
-	// info弹窗(infoPopup与uni-popup的ref值一样)
-	// 弹出层组件：https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html
-	const infoPopup = ref(null)
+	// info弹窗
 	const clickInfo = () => {
-		infoPopup.value.open()
+		// 弹出层组件：https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html
+		infoPopup.value.open();
 	}
 
+	// 关闭info弹窗
 	const clickInfoClose = () => {
-		infoPopup.value.close()
+		infoPopup.value.close();
+	}
+
+	// 评分弹窗
+	const clickScore = () => {
+		scorePopup.value.open();
+	}
+
+	// 关闭评分弹窗
+	const clickScoreClose = () => {
+		scorePopup.value.close();
+	}
+
+	// 确认评分
+	const submit = () => {
+		console.log("确认评分");
 	}
 </script>
 
@@ -207,7 +252,24 @@
 			}
 		}
 
-		// 弹框
+		// 弹框 共同头部样式
+		.popHeader {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.title {
+				color: $text-font-color-2;
+				font-size: 26rpx;
+			}
+
+			.close {
+				// 增大触摸区域
+				padding: 6rpx;
+			}
+		}
+
+		// 信息弹框
 		.infoPopup {
 			background: #fff;
 			padding: 30rpx;
@@ -215,24 +277,6 @@
 			border-radius: 30rpx 30rpx 0 0;
 			// 超出部分影藏
 			overflow: hidden;
-
-			.popHeader {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-
-				.title {
-					color: $text-font-color-2;
-					font-size: 26rpx;
-				}
-
-				.close {
-					// 增大触摸区域
-					padding: 6rpx;
-				}
-
-
-			}
 
 			scroll-view {
 				// scroll-view，限制最大高度，这样在内容多的时候，有滚动条
@@ -303,5 +347,39 @@
 				}
 			}
 		}
+
+		// 评分弹框
+		.scorePopup {
+			background: #fff;
+			padding: 30rpx;
+			width: 70vw;
+			border-radius: 30rpx;
+
+			.content {
+				padding: 30rpx 0;
+				// 居中
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				.text {
+					color: #FFCA3E;
+					padding-left: 10rpx;
+					width: 80rpx;
+					font-size: 22rpx;
+					line-height: 1em;
+					text-align: right;
+				}
+			}
+
+			.footer {
+				padding: 10rpx 0;
+				// 居中
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
 	}
 </style>
