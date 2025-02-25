@@ -4,15 +4,27 @@
 		<custom-nav-bar title="分类"></custom-nav-bar>
 
 		<view class="classify">
-			<theme-item v-for="item in 15">
-
-			</theme-item>
+			<theme-item v-for="item in classifyList" :key="item._id" :item="item"></theme-item>
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import {ref} from "vue";
+	import {apiGetClassify} from "@/api/apis.js"
 
+	const classifyList = ref([])
+
+	// 请求专题
+	const getClassfy = async () => {
+		let data = await apiGetClassify({
+			select: true
+		});
+
+		classifyList.value = data.data
+	}
+
+	getClassfy();
 </script>
 
 <style lang="scss" scoped>

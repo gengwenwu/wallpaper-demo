@@ -4,7 +4,7 @@
 		<navigator url="/pages/classlist/classlist" class="box" v-if="!isMore">
 			<image class="pic" :src="item.picurl" mode="aspectFill" />
 			<view class="mask">{{item.name}}</view>
-			<view class="tab">3天前更新</view>
+			<view class="tab">{{compareTimestamp(item.updateTime)}}</view>
 		</navigator>
 
 		<!-- 更多 -->
@@ -19,6 +19,10 @@
 </template>
 
 <script setup>
+	import {
+		compareTimestamp
+	} from "@/utils/common.js"
+
 	defineProps({
 		isMore: {
 			type: Boolean,
