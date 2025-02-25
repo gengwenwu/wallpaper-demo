@@ -1,7 +1,7 @@
 <template>
 	<view class="themeItem">
 		<!-- 正常图片 -->
-		<navigator url="/pages/classlist/classlist" class="box" v-if="!isMore">
+		<navigator :url="'/pages/classlist/classlist?id='+item._id+'&name='+item.name" class="box" v-if="!isMore">
 			<image class="pic" :src="item.picurl" mode="aspectFill" />
 			<view class="mask">{{item.name}}</view>
 			<view class="tab">{{compareTimestamp(item.updateTime)}}</view>

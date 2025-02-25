@@ -32,3 +32,11 @@ export function apiGetClassify(data = {}) {
 		data
 	})
 }
+
+// 分类
+export function apiGetClasswList(data = {}) {
+	return request({
+		url: "/wallList",
+		data
+	})
+}
