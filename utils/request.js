@@ -13,7 +13,7 @@ export function request(config = {}) {
 	} = config
 
 	url = BASE_URL + url
-	// header['access-key"'] = "aaaaa"
+	header['access-key'] = "HelloLoganKey"
 
 	return new Promise((resolve, reject) => {
 		uni.request({

@@ -1,10 +1,24 @@
 <template>
 	<view class="classlist">
+		<!-- 头部 loading框 -->
+		<view class="loadingLayout" v-if="!classList.length && !noData">
+			<uni-load-more status="loading" />
+		</view>
+
+		<!-- 列表内容 -->
 		<view class="content">
 			<navigator url="/pages/preview/preview" class="item" v-for="item in classList" :key="item._id">
 				<image :src="item.smallPicurl" mode="aspectFill" />
 			</navigator>
 		</view>
+
+		<!-- 触底 加载框-->
+		<view class="loadingLayout" v-if="classList.length || noData">
+			<uni-load-more :status="noData ? 'noMore' : 'loading'" />
+		</view>
+
+		<!--  app、小程序底部安全高度 -->
+		<div class="safe-area-inset-bottom"></div>
 	</view>
 
 </template>
