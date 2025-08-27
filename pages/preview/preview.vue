@@ -2,8 +2,8 @@
 	<view class="preview">
 		<!-- 轮播数字 -->
 		<swiper circular :current="currentIndex" @change="swiperChange">
-			<swiper-item v-for="item in classList">
-				<image @click="maskChange" :src="item.picurl" mode="aspectFill" />
+			<swiper-item v-for="(item, index) in classList">
+				<image v-if="readImgs.includes(index)" @click="maskChange" :src="item.picurl" mode="aspectFill" />
 			</swiper-item>
 		</swiper>
 
@@ -29,8 +29,10 @@
 					<view class="text">下载</view>
 				</view>
 			</view>
+				{{readImgs}}
 		</view>
 
+	
 		<!-- 信息弹框 https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html -->
 		<uni-popup ref="infoPopup" type="bottom">
 			<view class="infoPopup">
@@ -129,6 +131,8 @@
 	const userScore = ref(0)
 	// 分类列表
 	const classList = ref([])
+	// 已读图片列表
+	const readImgs = ref([])
 
 	// 存储中拿到数据
 	const storageClassList = uni.getStorageSync("storageClassList") || []
@@ -151,12 +155,15 @@
 		currentIndex.value = classList.value.findIndex((item) => item._id == currentId.value)
 
 		// console.log("id:", currentId.value, currentIndex.value);
+
+		readImgsFun()
 	})
 
 	// swiper 切换事件
 	const swiperChange = (e) => {
 		// console.log(e);
 		currentIndex.value = e.detail.current
+		readImgsFun()
 	}
 
 	// 遮罩状态
@@ -193,6 +200,19 @@
 	// 返回
 	const goBack = () => {
 		uni.navigateBack()
+	}
+
+	// 读取显示图片（只有当前显示的，以及其左右两张图片才会显示图片）
+	function readImgsFun() {
+		readImgs.value.push(
+			currentIndex.value <= 0 ? classList.value.length - 1 : currentIndex.value-1,
+			currentIndex.value,
+			currentIndex.value >= classList.value.length ? 0 : currentIndex.value+1
+		)
+
+		readImgs.value = [...new Set(readImgs.value)]
+		
+		// console.log("readImgs", readImgs.value);
 	}
 </script>
 
