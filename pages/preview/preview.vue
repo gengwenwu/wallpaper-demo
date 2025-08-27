@@ -1,7 +1,7 @@
 <template>
 	<view class="preview">
 		<!-- 轮播数字 -->
-		<swiper circular>
+		<swiper circular :current="currentIndex">
 			<swiper-item v-for="item in classList">
 				<image @click="maskChange" :src="item.picurl" mode="aspectFill" />
 			</swiper-item>
@@ -12,7 +12,7 @@
 			<view class="goBack" :style="{top:getStatusBarHeight()+'px'}" @click="goBack">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
-			<view class="count">3 / {{ classList.length }}</view>
+			<view class="count">{{currentIndex+1}} / {{ classList.length }}</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
 			<view class="footer">
@@ -116,6 +116,10 @@
 		getStatusBarHeight
 	} from "@/utils/system.js"
 
+	import {
+		onLoad
+	} from "@dcloudio/uni-app"
+
 	const maskState = ref(true)
 	// info弹窗 (infoPopup与uni-popup的ref值一样)
 	const infoPopup = ref(null)
@@ -130,12 +134,24 @@
 	const storageClassList = uni.getStorageSync("storageClassList") || []
 	classList.value = storageClassList.map((item) => {
 		return {
-			...classList,
+			...item,
 			picurl: item.smallPicurl.replace("_small.webp", ".jpg")
 		}
 	})
+	// console.log(classList.value);
 
-	console.log(classList.value);
+	const currentId = ref(null)
+	const currentIndex = ref(0)
+
+	//  页面加载
+	onLoad((e) => {
+		// 获取id参数
+		currentId.value = e.id
+		// 查找对应图片
+		currentIndex.value = classList.value.findIndex((item) => item._id == currentId.value)
+
+		// console.log("id:", currentId.value, currentIndex.value);
+	})
 
 	// 遮罩状态
 	const maskChange = () => {

@@ -7,7 +7,8 @@
 
 		<!-- 列表内容 -->
 		<view class="content">
-			<navigator url="/pages/preview/preview" class="item" v-for="item in classList" :key="item._id">
+			<navigator :url="'/pages/preview/preview?id=' + item._id" class="item" v-for="item in classList"
+				:key="item._id">
 				<image :src="item.smallPicurl" mode="aspectFill" />
 			</navigator>
 		</view>
@@ -78,7 +79,7 @@
 		if (queryParams.pageSize > res.data.length) {
 			noData.value = true
 		}
-		
+
 		uni.setStorageSync("storageClassList", classList.value)
 	}
 </script>
