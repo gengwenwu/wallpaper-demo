@@ -2,8 +2,8 @@
 	<view class="preview">
 		<!-- 轮播数字 -->
 		<swiper circular>
-			<swiper-item v-for="item in 5">
-				<image @click="maskChange" src="/common/images/preview1.jpg" mode="aspectFill"></image>
+			<swiper-item v-for="item in classList">
+				<image @click="maskChange" :src="item.picurl" mode="aspectFill" />
 			</swiper-item>
 		</swiper>
 
@@ -12,7 +12,7 @@
 			<view class="goBack" :style="{top:getStatusBarHeight()+'px'}" @click="goBack">
 				<uni-icons type="back" color="#fff" size="20"></uni-icons>
 			</view>
-			<view class="count">3 / 9</view>
+			<view class="count">3 / {{ classList.length }}</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
 			<view class="footer">
@@ -123,6 +123,19 @@
 	const scorePopup = ref(null)
 	// 用户评分
 	const userScore = ref(0)
+	// 分类列表
+	const classList = ref([])
+
+	// 存储中拿到数据
+	const storageClassList = uni.getStorageSync("storageClassList") || []
+	classList.value = storageClassList.map((item) => {
+		return {
+			...classList,
+			picurl: item.smallPicurl.replace("_small.webp", ".jpg")
+		}
+	})
+
+	console.log(classList.value);
 
 	// 遮罩状态
 	const maskChange = () => {

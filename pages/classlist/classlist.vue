@@ -78,6 +78,8 @@
 		if (queryParams.pageSize > res.data.length) {
 			noData.value = true
 		}
+		
+		uni.setStorageSync("storageClassList", classList.value)
 	}
 </script>
 
