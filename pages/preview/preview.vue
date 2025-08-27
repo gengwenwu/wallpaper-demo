@@ -1,7 +1,7 @@
 <template>
 	<view class="preview">
 		<!-- 轮播数字 -->
-		<swiper circular :current="currentIndex">
+		<swiper circular :current="currentIndex" @change="swiperChange">
 			<swiper-item v-for="item in classList">
 				<image @click="maskChange" :src="item.picurl" mode="aspectFill" />
 			</swiper-item>
@@ -152,6 +152,12 @@
 
 		// console.log("id:", currentId.value, currentIndex.value);
 	})
+
+	// swiper 切换事件
+	const swiperChange = (e) => {
+		// console.log(e);
+		currentIndex.value = e.detail.current
+	}
 
 	// 遮罩状态
 	const maskChange = () => {
