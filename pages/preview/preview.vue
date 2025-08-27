@@ -48,32 +48,32 @@
 					<view class="content">
 						<view class="row">
 							<text class="label">壁纸ID：</text>
-							<text class="value" selectable>122323232</text>
+							<text class="value" selectable>{{currentInfo._id}}</text>
 						</view>
-						<view class="row">
+					<!-- 	<view class="row">
 							<text class="label">分类：</text>
 							<text class="value class">明星美女</text>
-						</view>
+						</view> -->
 						<view class="row">
 							<text class="label">发布者：</text>
-							<text class="value">咸虾米</text>
+							<text class="value">{{currentInfo.nickname}}</text>
 						</view>
 						<view class="row">
 							<text class="label">评分：</text>
 							<view class="value roteBox">
 								<!-- 评分组件， https://uniapp.dcloud.net.cn/component/uniui/uni-rate.html -->
-								<uni-rate readonly touchable value="3.5" size="16" />
-								<text class="score">5分</text>
+								<uni-rate readonly touchable :value="currentInfo.score" size="16" />
+								<text class="score">{{currentInfo.score}}分</text>
 							</view>
 						</view>
 						<view class="row">
 							<text class="label">摘要：</text>
-							<text class="value">摘要文字内容填充部分，摘要文字内容填充部分，摘要文字内容填充部分，摘要文字内容填充部分，摘要文字内容填充部分，</text>
+							<text class="value">{{currentInfo.description}}</text>
 						</view>
 						<view class="row">
 							<text class="label">标签：</text>
 							<view class="value tabs">
-								<view class="tab" v-for="item in 3">标签名</view>
+								<view class="tab" v-for="tab in currentInfo.tabs">{{tab}}</view>
 							</view>
 						</view>
 						<view class="copyright">
@@ -133,6 +133,8 @@
 	const classList = ref([])
 	// 已读图片列表
 	const readImgs = ref([])
+	// 当前信息
+	const currentInfo = ref(null)
 
 	// 存储中拿到数据
 	const storageClassList = uni.getStorageSync("storageClassList") || []
@@ -153,7 +155,8 @@
 		currentId.value = e.id
 		// 查找对应图片
 		currentIndex.value = classList.value.findIndex((item) => item._id == currentId.value)
-
+		// 当前显示的信息
+		currentInfo.value = classList.value[currentIndex.value]
 		// console.log("id:", currentId.value, currentIndex.value);
 
 		readImgsFun()
@@ -163,6 +166,8 @@
 	const swiperChange = (e) => {
 		// console.log(e);
 		currentIndex.value = e.detail.current
+		// 当前显示的信息
+		currentInfo.value = classList.value[currentIndex.value]
 		readImgsFun()
 	}
 
@@ -211,7 +216,6 @@
 		)
 
 		readImgs.value = [...new Set(readImgs.value)]
-		
 		// console.log("readImgs", readImgs.value);
 	}
 </script>
