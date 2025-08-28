@@ -48,3 +48,12 @@ export function apiGetSetupScore(data = {}) {
 		data
 	})
 }
+
+
+// 壁纸下载
+export function apiWriteDownload(data = {}) {
+	return request({
+		url: "/downloadWall",
+		data
+	})
+}

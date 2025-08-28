@@ -15,7 +15,7 @@
 			<view class="count">{{currentIndex+1}} / {{ classList.length }}</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
-			<view class="footer">
+			<view class="footer" v-if="currentInfo">
 				<view class="box" @click="clickInfo">
 					<uni-icons type="info" size="23"></uni-icons>
 					<view class="text">信息</view>
@@ -44,7 +44,7 @@
 					</view>
 				</view>
 				<scroll-view scroll-y>
-					<view class="content">
+					<view class="content" v-if="currentInfo">
 						<view class="row">
 							<text class="label">壁纸ID：</text>
 							<text class="value" selectable>{{currentInfo._id}}</text>
@@ -72,7 +72,7 @@
 						<view class="row">
 							<text class="label">标签：</text>
 							<view class="value tabs">
-								<view class="tab" v-for="tab in currentInfo.tabs">{{tab}}</view>
+								<view class="tab" v-for="tab in currentInfo.tabs" :key="tab">{{tab}}</view>
 							</view>
 						</view>
 						<view class="copyright">
@@ -123,7 +123,8 @@
 	} from "@dcloudio/uni-app"
 
 	import {
-		apiGetSetupScore
+		apiGetSetupScore,
+		apiWriteDownload
 	} from "@/api/apis.js"
 
 	const maskState = ref(true)
@@ -217,7 +218,7 @@
 				title: "加载中"
 			})
 
-			// 结构
+			// 结构出参数
 			let {
 				classid,
 				_id: wallId
@@ -251,7 +252,7 @@
 	}
 
 	// 下载
-	const clickDownload = () => {
+	const clickDownload = async () => {
 		// #ifdef H5
 		uni.showModal({
 			content: "请长按保存壁纸",
@@ -259,74 +260,96 @@
 		})
 		// #endif
 
-
 		// #ifndef H5
 		uni.showLoading({
 			title: "下载中...",
 			mask: true
 		})
 
-		uni.getImageInfo({
-			src: currentInfo.value.picurl,
-			// 图片下载成功
-			success: (res) => {
-				// 保存图片，小程序需要隐私协议设置好授权，否则功能异常
-				uni.saveImageToPhotosAlbum({
-					filePath: res.path,
-					// 保存图片成功
-					success: (res) => {
-						console.log(res);
-					},
-					// 保存图片异常：如授权异常，取消保存等
-					fail: err => {
-						// 取消保存
-						if (err.errMsg == 'saveImageToPhotosAlbum:fail cancel') {
-							uni.showToast({
-								title: '保存失败，请重新点击下载',
-								icon: 'none'
-							})
+		try {
 
-							return;
-						}
+			let {
+				classid,
+				_id: wallId
+			} = currentInfo.value
+			let res = await apiWriteDownload({
+				classid,
+				wallId
+			})
 
-						// 未授权
-						uni.showModal({
-							title: "提示",
-							content: "需要授权保存相册",
-							success: res => {
-								if (res.confirm) {
-									// 进入授权页面
-									// https://uniapp.dcloud.net.cn/api/other/setting.html
-									uni.openSetting({
-										success: (setting) => {
-											console.log(setting);
+			console.log(res);
+			
+			// 出现异常，抛出异常，在catch中处理
+			if (res.errCode != 0) throw res
 
-											if (setting.authSetting[
-													'scope.writePhotosAlbum'
-												]) {
-												uni.showToast({
-													title: "获取授权成功",
-													icon: "none"
-												})
-											} else {
-												uni.showToast({
-													title: "获取权限失败",
-													icon: "none"
-												})
-											}
-										}
-									})
-								}
+			uni.getImageInfo({
+				src: currentInfo.value.picurl,
+				// 图片下载成功
+				success: (res) => {
+					// 保存图片，小程序需要隐私协议设置好授权，否则功能异常
+					uni.saveImageToPhotosAlbum({
+						filePath: res.path,
+						// 保存图片成功
+						success: (res) => {
+							console.log(res);
+						},
+						// 保存图片异常：如授权异常，取消保存等
+						fail: err => {
+							// 取消保存
+							if (err.errMsg == 'saveImageToPhotosAlbum:fail cancel') {
+								uni.showToast({
+									title: '保存失败，请重新点击下载',
+									icon: 'none'
+								})
+
+								return;
 							}
-						})
-					},
-					// 图片下载处理完成
-					complete: () => {
-						uni.hideLoading()
-					}
-				})
-			}
-		})
+
+							// 未授权
+							uni.showModal({
+								title: "提示",
+								content: "需要授权保存相册",
+								success: res => {
+									if (res.confirm) {
+										// 进入授权页面
+										// https://uniapp.dcloud.net.cn/api/other/setting.html
+										uni.openSetting({
+											success: (setting) => {
+												console.log(
+													setting);
+
+												if (setting
+													.authSetting[
+														'scope.writePhotosAlbum'
+													]) {
+													uni.showToast({
+														title: "获取授权成功",
+														icon: "none"
+													})
+												} else {
+													uni.showToast({
+														title: "获取权限失败",
+														icon: "none"
+													})
+												}
+											}
+										})
+									}
+								}
+							})
+						},
+						// 图片下载处理完成
+						complete: () => {
+							uni.hideLoading()
+						}
+					})
+				}
+			})
+		} catch (error) {
+			console.log(error);
+			uni.hideLoading()
+		}
+
 		// #endif
 	}
 
