@@ -1,4 +1,5 @@
 const BASE_URL = "https://tea.qingnian8.com/api/bizhi"
+
 /**
  * 网络请求基类
  **/
@@ -36,10 +37,6 @@ export function request(config = {}) {
 					})
 
 					reject(res.data)
-					// uni.showToast({
-					// 	title: res.data.errMsg,
-					// 	icon: "none"
-					// })
 				} else {
 					// 其它错误
 					uni.showToast({

@@ -218,7 +218,10 @@
 			})
 
 			// 结构
-			let {classid, _id: wallId} = currentInfo.value
+			let {
+				classid,
+				_id: wallId
+			} = currentInfo.value
 
 			let res = await apiGetSetupScore({
 				classid,
@@ -245,6 +248,86 @@
 	// 返回
 	const goBack = () => {
 		uni.navigateBack()
+	}
+
+	// 下载
+	const clickDownload = () => {
+		// #ifdef H5
+		uni.showModal({
+			content: "请长按保存壁纸",
+			showCancel: false
+		})
+		// #endif
+
+
+		// #ifndef H5
+		uni.showLoading({
+			title: "下载中...",
+			mask: true
+		})
+
+		uni.getImageInfo({
+			src: currentInfo.value.picurl,
+			// 图片下载成功
+			success: (res) => {
+				// 保存图片，小程序需要隐私协议设置好授权，否则功能异常
+				uni.saveImageToPhotosAlbum({
+					filePath: res.path,
+					// 保存图片成功
+					success: (res) => {
+						console.log(res);
+					},
+					// 保存图片异常：如授权异常，取消保存等
+					fail: err => {
+						// 取消保存
+						if (err.errMsg == 'saveImageToPhotosAlbum:fail cancel') {
+							uni.showToast({
+								title: '保存失败，请重新点击下载',
+								icon: 'none'
+							})
+
+							return;
+						}
+
+						// 未授权
+						uni.showModal({
+							title: "提示",
+							content: "需要授权保存相册",
+							success: res => {
+								if (res.confirm) {
+									// 进入授权页面
+									// https://uniapp.dcloud.net.cn/api/other/setting.html
+									uni.openSetting({
+										success: (setting) => {
+											console.log(setting);
+
+											if (setting.authSetting[
+													'scope.writePhotosAlbum'
+												]) {
+												uni.showToast({
+													title: "获取授权成功",
+													icon: "none"
+												})
+											} else {
+												uni.showToast({
+													title: "获取权限失败",
+													icon: "none"
+												})
+											}
+										}
+									})
+								}
+							}
+						})
+					},
+					// 图片下载处理完成
+					complete: () => {
+						uni.hideLoading()
+					}
+				})
+			}
+		})
+		// #endif
 	}
 
 	// 读取显示图片（只有当前显示的，以及其左右两张图片才会显示图片）
