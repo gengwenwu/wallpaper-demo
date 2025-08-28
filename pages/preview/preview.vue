@@ -22,17 +22,16 @@
 				</view>
 				<view class="box" @click="clickScore">
 					<uni-icons type="star" size="23"></uni-icons>
-					<view class="text">5分</view>
+					<view class="text">{{currentInfo.userScore ? currentInfo.userScore : 0}}分</view>
 				</view>
 				<view class="box">
 					<uni-icons type="download" size="23"></uni-icons>
 					<view class="text">下载</view>
 				</view>
 			</view>
-				{{readImgs}}
 		</view>
 
-	
+
 		<!-- 信息弹框 https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html -->
 		<uni-popup ref="infoPopup" type="bottom">
 			<view class="infoPopup">
@@ -50,7 +49,7 @@
 							<text class="label">壁纸ID：</text>
 							<text class="value" selectable>{{currentInfo._id}}</text>
 						</view>
-					<!-- 	<view class="row">
+						<!-- 	<view class="row">
 							<text class="label">分类：</text>
 							<text class="value class">明星美女</text>
 						</view> -->
@@ -62,8 +61,8 @@
 							<text class="label">评分：</text>
 							<view class="value roteBox">
 								<!-- 评分组件， https://uniapp.dcloud.net.cn/component/uniui/uni-rate.html -->
-								<uni-rate readonly touchable :value="currentInfo.score" size="16" />
-								<text class="score">{{currentInfo.score}}分</text>
+								<uni-rate readonly touchable :value="userScore" size="16" />
+								<text class="score">{{userScore}}分</text>
 							</view>
 						</view>
 						<view class="row">
@@ -90,19 +89,20 @@
 				<view class="popHeader">
 					<!-- 这里的空view，是UI占位作用 -->
 					<view></view>
-					<view class="title">壁纸评分</view>
+					<view class="title">{{isScored ? '已经评分了': '壁纸评分'}}</view>
 					<view class="close">
 						<uni-icons @click="clickScoreClose" type="closeempty" size="18" color="#999" />
 					</view>
 				</view>
 				<view class="content">
-					<uni-rate v-model="userScore" allow-half></uni-rate>
+					<uni-rate v-model="userScore" allow-half :disabled="isScored" />
 					<text class="text">{{userScore}}分</text>
 				</view>
-				<veiw class="footer">
+				<view class="footer">
 					<!-- plain 案例镂空 -->
-					<button @click="submit" :disabled="!userScore" type="default" size="mini" plain>确认评分</button>
-				</veiw>
+					<button @click="submitScore" :disabled="!userScore || isScored" type="default" size="mini"
+						plain>确认评分</button>
+				</view>
 			</view>
 		</uni-popup>
 
@@ -122,6 +122,10 @@
 		onLoad
 	} from "@dcloudio/uni-app"
 
+	import {
+		apiGetSetupScore
+	} from "@/api/apis.js"
+
 	const maskState = ref(true)
 	// info弹窗 (infoPopup与uni-popup的ref值一样)
 	const infoPopup = ref(null)
@@ -135,6 +139,8 @@
 	const readImgs = ref([])
 	// 当前信息
 	const currentInfo = ref(null)
+	// 是否已经评论
+	const isScored = ref(false)
 
 	// 存储中拿到数据
 	const storageClassList = uni.getStorageSync("storageClassList") || []
@@ -157,7 +163,6 @@
 		currentIndex.value = classList.value.findIndex((item) => item._id == currentId.value)
 		// 当前显示的信息
 		currentInfo.value = classList.value[currentIndex.value]
-		// console.log("id:", currentId.value, currentIndex.value);
 
 		readImgsFun()
 	})
@@ -168,6 +173,7 @@
 		currentIndex.value = e.detail.current
 		// 当前显示的信息
 		currentInfo.value = classList.value[currentIndex.value]
+
 		readImgsFun()
 	}
 
@@ -178,6 +184,7 @@
 
 	// info弹窗
 	const clickInfo = () => {
+		userScore.value = currentInfo.value.userScore || 0
 		// 弹出层组件：https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html
 		infoPopup.value.open();
 	}
@@ -189,17 +196,50 @@
 
 	// 评分弹窗
 	const clickScore = () => {
+		if (currentInfo.value.userScore) {
+			isScored.value = true;
+		}
+
+		userScore.value = currentInfo.value.userScore || 0
 		scorePopup.value.open();
 	}
 
 	// 关闭评分弹窗
 	const clickScoreClose = () => {
+		isScored.value = false
 		scorePopup.value.close();
 	}
 
 	// 确认评分
-	const submit = () => {
-		console.log("确认评分");
+	const submitScore = async () => {
+		try {
+			uni.showLoading({
+				title: "加载中"
+			})
+
+			// 结构
+			let {classid, _id: wallId} = currentInfo.value
+
+			let res = await apiGetSetupScore({
+				classid,
+				wallId,
+				userScore: userScore.value
+			})
+
+			if (res.errCode === 0) {
+				uni.showToast({
+					title: "评价成功",
+					icon: "none"
+				})
+
+				classList.value[currentIndex.value].userScore = userScore.value
+				currentInfo.value = classList.value[currentIndex.value]
+				uni.setStorageSync("storageClassList", classList.value)
+			}
+		} finally {
+			uni.hideLoading()
+			clickScoreClose();
+		}
 	}
 
 	// 返回
@@ -210,9 +250,9 @@
 	// 读取显示图片（只有当前显示的，以及其左右两张图片才会显示图片）
 	function readImgsFun() {
 		readImgs.value.push(
-			currentIndex.value <= 0 ? classList.value.length - 1 : currentIndex.value-1,
+			currentIndex.value <= 0 ? classList.value.length - 1 : currentIndex.value - 1,
 			currentIndex.value,
-			currentIndex.value >= classList.value.length ? 0 : currentIndex.value+1
+			currentIndex.value >= classList.value.length ? 0 : currentIndex.value + 1
 		)
 
 		readImgs.value = [...new Set(readImgs.value)]

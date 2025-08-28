@@ -34,7 +34,12 @@ export function request(config = {}) {
 						content: res.data.errMsg,
 						showCancel: false
 					})
+
 					reject(res.data)
+					// uni.showToast({
+					// 	title: res.data.errMsg,
+					// 	icon: "none"
+					// })
 				} else {
 					// 其它错误
 					uni.showToast({
@@ -50,5 +55,4 @@ export function request(config = {}) {
 			}
 		})
 	})
-
 }
