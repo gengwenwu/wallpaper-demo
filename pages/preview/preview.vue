@@ -1,5 +1,5 @@
 <template>
-	<view class="preview">
+	<view class="preview" v-if="currentInfo">
 		<!-- 轮播数字 -->
 		<swiper circular :current="currentIndex" @change="swiperChange">
 			<swiper-item v-for="(item, index) in classList">
@@ -15,7 +15,7 @@
 			<view class="count">{{currentIndex+1}} / {{ classList.length }}</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
-			<view class="footer" v-if="currentInfo">
+			<view class="footer" >
 				<view class="box" @click="clickInfo">
 					<uni-icons type="info" size="23"></uni-icons>
 					<view class="text">信息</view>
@@ -44,7 +44,7 @@
 					</view>
 				</view>
 				<scroll-view scroll-y>
-					<view class="content" v-if="currentInfo">
+					<view class="content" >
 						<view class="row">
 							<text class="label">壁纸ID：</text>
 							<text class="value" selectable>{{currentInfo._id}}</text>
