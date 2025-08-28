@@ -77,6 +77,11 @@
 		ref
 	} from 'vue'
 
+	// 分享
+	import {
+		onShareAppMessage, onShareTimeline
+	} from "@dcloudio/uni-app"
+
 	import {
 		apiGetBanner,
 		apiGetDayRandom,
@@ -141,6 +146,26 @@
 			url: "/pages/preview/preview"
 		})
 	}
+
+	// 分享给好友
+	onShareAppMessage((e) => {
+		return {
+			title: "咸虾米壁纸",
+			path: "/pages/index/index"
+		}
+	})
+	
+	onShareTimeline(()=>{
+		return {
+			title: "咸虾米壁纸",
+			// 网络图、本地图均可。注意：
+			// 1，图片是1:1比例
+			// 2，本地图片使用static目录的，放在common中的，打包后，会拿不到图片
+			// 3, 分享朋友圈，参数imageUrl也可以不要写
+			imageUrl: "/static/images/xxmLogo.png",
+			// imageUrl: bannerList.value[0].picurl
+		}
+	})
 </script>
 
 <style lang="scss" scoped>
