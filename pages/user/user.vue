@@ -68,7 +68,7 @@
 						<uni-icons type="right" size="20" color="#aaa" />
 					</view>
 				</view>
-				<view class="row">
+				<view class="row" @click="gotoQA">
 					<view class="left">
 						<uni-icons type="flag-filled" size="20" />
 						<text class="text">常见问题</text>
@@ -132,6 +132,13 @@
 		}
 	})
 	getUserInfo()
+
+	//  常见问题
+	const gotoQA = () => {
+		uni.navigateTo({
+			url: "/pages/notice/detail?id=6536358ce0ec19c8d67fbe82"
+		})
+	}
 </script>
 
 <style lang="scss" scoped>

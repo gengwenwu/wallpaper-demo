@@ -16,7 +16,6 @@
 
 		<view class="content">
 			<!-- <rich-text :nodes="detail.content" /> -->
-			
 			<mp-html :content="detail.content" />
 		</view>
 
