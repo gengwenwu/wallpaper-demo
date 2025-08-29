@@ -4,7 +4,7 @@
 		<navigator :url="'/pages/classlist/classlist?id='+item._id+'&name='+item.name" class="box" v-if="!isMore">
 			<image class="pic" :src="item.picurl" mode="aspectFill" />
 			<view class="mask">{{item.name}}</view>
-			<view class="tab">{{compareTimestamp(item.updateTime)}}</view>
+			<view class="tab" v-if="compareTimestamp(item.updateTime)">{{compareTimestamp(item.updateTime)}}</view>
 		</navigator>
 
 		<!-- 更多 -->
