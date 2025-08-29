@@ -8,7 +8,13 @@
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" circular
 				autoplay duration="600" interval="2000">
 				<swiper-item v-for="item in bannerList" :key="item._id">
-					<image :src="item.picurl" mode="aspectFill" />
+					<navigator v-if="item.target == 'miniProgram'" :url="item.url" class="like" :app-id="item.appid" target="miniProgram">
+						<image :src="item.picurl" mode="aspectFill" />
+					</navigator>
+					
+					<navigator v-else :url="`/pages/classlist/classlist?${item.url}`" class="like">
+						<image :src="item.picurl" mode="aspectFill" />
+					</navigator>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -188,10 +194,15 @@
 					height: 100%;
 					padding: 0 30rpx;
 
-					image {
+					.like {
 						width: 100%;
 						height: 100%;
-						border-radius: 10rpx;
+
+						image {
+							width: 100%;
+							height: 100%;
+							border-radius: 10rpx;
+						}
 					}
 				}
 			}
