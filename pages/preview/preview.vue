@@ -120,6 +120,7 @@
 
 	import {
 		onLoad,
+		onUnload,
 		onShareAppMessage,
 		onShareTimeline
 	} from "@dcloudio/uni-app"
@@ -411,6 +412,10 @@
 			// 朋友圈传参，不要带path
 			query: "id=" + currentId.value + "&type=share"
 		}
+	})
+	
+	onUnload(()=>{
+		uni.removeStorageSync("storageClassList")
 	})
 </script>
 

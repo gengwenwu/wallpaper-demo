@@ -47,7 +47,7 @@
 			</common-title>
 			<view class="content">
 				<scroll-view scroll-x>
-					<view class="box" @click="goPreview" v-for="item in randomList" :key="item._id">
+					<view class="box" @click="goPreview(item._id)" v-for="item in randomList" :key="item._id">
 						<image :src="item.smallPicurl" mode="aspectFill" />
 					</view>
 				</scroll-view>
@@ -79,7 +79,8 @@
 
 	// 分享
 	import {
-		onShareAppMessage, onShareTimeline
+		onShareAppMessage,
+		onShareTimeline
 	} from "@dcloudio/uni-app"
 
 	import {
@@ -141,9 +142,11 @@
 	getClassify()
 
 	// 预览
-	const goPreview = () => {
+	const goPreview = (id) => {
+		uni.setStorageSync("storageClassList", randomList.value)
+
 		uni.navigateTo({
-			url: "/pages/preview/preview"
+			url: "/pages/preview/preview?id=" + id
 		})
 	}
 
@@ -154,9 +157,9 @@
 			path: "/pages/index/index"
 		}
 	})
-	
+
 	// 分享朋友圈
-	onShareTimeline(()=>{
+	onShareTimeline(() => {
 		return {
 			title: "咸虾米壁纸",
 			// 网络图、本地图均可。注意：
