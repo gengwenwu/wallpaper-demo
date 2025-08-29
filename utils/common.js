@@ -35,3 +35,20 @@ export function compareTimestamp(timestamp) {
 	// 超过3个月
 	return null;
 }
+
+
+// 返回首页
+export function gotoHome() {
+	uni.showModal({
+		title: "提示",
+		content: "页面有误将返回首页",
+		showCancel: false,
+		success: (res) => {
+			if (res.confirm) {
+				uni.reLaunch({
+					url: "/pages/index/index"
+				})
+			}
+		}
+	})
+}

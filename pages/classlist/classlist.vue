@@ -41,6 +41,10 @@
 		onShareTimeline
 	} from "@dcloudio/uni-app"
 
+	import {
+		gotoHome
+	} from "@/utils/common.js"
+
 	// 列表数据
 	const classList = ref([])
 	// 接口请求参数
@@ -58,6 +62,8 @@
 		// id
 		queryParams.classid = e.id
 		pageName = e.name
+
+		if (!e.id) gotoHome()
 
 		// 标题
 		uni.setNavigationBarTitle({
@@ -115,7 +121,7 @@
 
 	// 卸载
 	onUnload(() => {
-		
+
 		// 清除缓存
 		uni.removeStorageSync("storageClassList")
 	})
