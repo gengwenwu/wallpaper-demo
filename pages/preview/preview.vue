@@ -78,6 +78,7 @@
 						<view class="copyright">
 							声明：本图片学习使用，非商业用途。如果侵犯了您的权益，请联系QQ：490211581，维护您的权益
 						</view>
+						<view class="safe-area-inset-bottom"></view>
 					</view>
 				</scroll-view>
 			</view>
@@ -420,6 +421,7 @@
 </script>
 
 <style lang="scss" scoped>
+	
 	.preview {
 		width: 100%;
 		height: 100vh;
