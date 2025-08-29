@@ -13,7 +13,7 @@
 		<!-- 第1块区域 -->
 		<view class="section">
 			<view class="list">
-				<view class="row" @click="go2ClassList">
+				<view class="row" @click="go2ClassList('我的下载', 'download')">
 					<view class="left">
 						<uni-icons type="download-filled" size="20"></uni-icons>
 						<text class="text">我的下载</text>
@@ -23,7 +23,7 @@
 						<uni-icons type="right" size="20" color="#aaa"></uni-icons>
 					</view>
 				</view>
-				<view class="row" @click="go2ClassList">
+				<view class="row" @click="go2ClassList('我的评分', 'score')">
 					<view class="left">
 						<uni-icons type="star-filled" size="20"></uni-icons>
 						<text class="text">我的评分</text>
@@ -80,7 +80,7 @@
 			</view>
 		</view>
 	</view>
-	
+
 	<view class="loadingLayout" v-else="userinfo">
 		<uni-load-more status="loading" />
 	</view>
@@ -109,9 +109,9 @@
 		})
 	}
 
-	const go2ClassList = () => {
+	const go2ClassList = (name, type) => {
 		uni.navigateTo({
-			url: "/pages/classlist/classlist"
+			url: "/pages/classlist/classlist?name=" + name + "&type=" + type
 		})
 	}
 
@@ -124,7 +124,7 @@
 
 	const address = computed(() => {
 		if (userinfo.value) {
-			console.log(userinfo.value);
+			// console.log(userinfo.value);
 			let addr = userinfo.value.address
 			return addr.city || addr.province || addr.city | ""
 		} else {

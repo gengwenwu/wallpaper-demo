@@ -30,7 +30,8 @@
 	} from "vue"
 
 	import {
-		apiGetClasswList
+		apiGetClasswList,
+		apiUserWallList
 	} from "../../api/apis.js"
 
 	import {
@@ -59,11 +60,20 @@
 
 	// onLoad 接收参数
 	onLoad((e) => {
-		// id
-		queryParams.classid = e.id
+		// 结构参数
+		let {
+			id = null, name = null, type = null
+		} = e;
+		
+		console.log("id:"+ id +", type:" +type);
+		
+		if (id) queryParams.classid = id;
+		if (type) queryParams.type = type;
+
 		pageName = e.name
 
-		if (!e.id) gotoHome()
+		//  必要参数验证
+		if (!queryParams.classid && !queryParams.type) gotoHome()
 
 		// 标题
 		uni.setNavigationBarTitle({
@@ -84,7 +94,12 @@
 
 	// 请求分类
 	const getClasswList = async () => {
-		let res = await apiGetClasswList(queryParams)
+		let res
+		// 分类列表
+		if(queryParams.classid) res = await apiGetClasswList(queryParams)
+		// 我的下载 || 我的评分
+		if(queryParams.type) res = await apiUserWallList(queryParams)
+		
 		classList.value = [...classList.value, ...res.data]
 
 		// 没有更多数据

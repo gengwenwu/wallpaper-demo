@@ -72,3 +72,11 @@ export function apiUserInfo(data = {}) {
 		data
 	})
 }
+
+// 我的评分/下载列表
+export function apiUserWallList(data = {}) {
+	return request({
+		url: "/userWallList",
+		data
+	})
+}
