@@ -1,12 +1,13 @@
 <template>
-	<view class="userLayout pageBg">
+	<view class="userLayout pageBg" v-if="userinfo">
+		<view :style="{height:getNaBarHeight() + 'px'}" />
 		<!-- 用户信息 -->
 		<view class="userInfo">
 			<view class="avator">
 				<image src="/static/images/xxmLogo.png" mode="aspectFill" />
 			</view>
-			<view class="ip">100.100.100.100</view>
-			<view class="address">来自于：{山东}</view>
+			<view class="ip">{{ userinfo.IP }}</view>
+			<view class="address">来自于：{{ address }}</view>
 		</view>
 
 		<!-- 第1块区域 -->
@@ -18,7 +19,7 @@
 						<text class="text">我的下载</text>
 					</view>
 					<view class="right">
-						<text class="text" color="#aaa">0</text>
+						<text class="text" color="#aaa">{{ userinfo.downloadSize }}</text>
 						<uni-icons type="right" size="20" color="#aaa"></uni-icons>
 					</view>
 				</view>
@@ -28,7 +29,7 @@
 						<text class="text">我的评分</text>
 					</view>
 					<view class="right">
-						<text class="text" color="#aaa">2</text>
+						<text class="text" color="#aaa">{{ userinfo.scoreSize }}</text>
 						<uni-icons type="right" size="20" color="#aaa"></uni-icons>
 					</view>
 				</view>
@@ -79,9 +80,28 @@
 			</view>
 		</view>
 	</view>
+	
+	<view class="loadingLayout" v-else="userinfo">
+		<uni-load-more status="loading" />
+	</view>
 </template>
 
 <script setup>
+	import {
+		computed,
+		ref
+	} from "vue"
+
+	import {
+		getNaBarHeight
+	} from "@/utils/system.js"
+
+	import {
+		apiUserInfo
+	} from "@/api/apis.js"
+
+	let userinfo = ref(null)
+
 	const clickContact = () => {
 		// 拨打电话，官方文档：api -> 设备， https://uniapp.dcloud.net.cn/api/system/phone.html
 		uni.makePhoneCall({
@@ -94,6 +114,24 @@
 			url: "/pages/classlist/classlist"
 		})
 	}
+
+	const getUserInfo = () => {
+		apiUserInfo().then(res => {
+			console.log(res.data);
+			userinfo.value = res.data
+		})
+	}
+
+	const address = computed(() => {
+		if (userinfo.value) {
+			console.log(userinfo.value);
+			let addr = userinfo.value.address
+			return addr.city || addr.province || addr.city | ""
+		} else {
+			return ""
+		}
+	})
+	getUserInfo()
 </script>
 
 <style lang="scss" scoped>

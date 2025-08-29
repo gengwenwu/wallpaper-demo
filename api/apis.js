@@ -64,3 +64,11 @@ export function apiDetailWall(data = {}) {
 		data
 	})
 }
+
+// 个人信息
+export function apiUserInfo(data = {}) {
+	return request({
+		url: "/userInfo",
+		data
+	})
+}
