@@ -1,51 +1,82 @@
 <template>
-	<view class="noticeLayout">
+	<view class="noticeLayout" v-if="detail">
 		<view class="title">
-			<view class="tag">
+			<view class="tag" v-if="detail.select">
 				<uni-tag inverted text="标签" type="error"></uni-tag>
 			</view>
-			<view class="font">这个区域填写标题</view>
+			<view class="font">{{ detail.title }}</view>
 		</view>
 
 		<view class="info">
-			<view class="item">咸虾米</view>
+			<view class="item">{{ detail.author }}</view>
 			<view class="item">
-				<uni-dateformat :date="new Date()" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
+				<uni-dateformat :date="detail.publish_date" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
 			</view>
 		</view>
 
 		<view class="content">
-			内容区域
+			<!-- <rich-text :nodes="detail.content" /> -->
+			
+			<mp-html :content="detail.content" />
 		</view>
 
 		<view class="count">
-			阅读量 5588
+			阅读量 {{ detail.view_count }}
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import {
+		ref
+	} from "vue"
 
+	import {
+		apiWallNewsDetail
+	} from "../../api/apis.js"
+
+	import {
+		onLoad
+	} from "@dcloudio/uni-app"
+
+
+	const detail = ref(null)
+	let noticeId
+
+	onLoad((e) => {
+		noticeId = e.id
+		
+		getNoticeDetail()
+	})
+
+	const getNoticeDetail = () => {
+		apiWallNewsDetail({
+			id: noticeId
+		}).then((res) => {
+			console.log(res.data);
+			detail.value = res.data
+		})
+	}
 </script>
 
 <style lang="scss" scoped>
 	.noticeLayout {
-		padding:30rpx;
-		
+		padding: 30rpx;
+
 		.title {
 			font-size: 40rpx;
 			color: #111;
 			line-height: 1.6em;
 			padding-bottom: 30rpx;
 			display: flex;
-			
-			.tag{
+
+			.tag {
 				transform: scale(0.8);
 				transform-origin: left center;
 				flex-shrink: 0;
 			}
-			
-			.font{
+
+			.font {
 				padding-left: 6rpx;
 			}
 		}
@@ -53,20 +84,20 @@
 		.info {
 			display: flex;
 			align-items: center;
-			color:#999;
+			color: #999;
 			font-size: 28rpx;
-			
-			.item{
+
+			.item {
 				padding-right: 20rpx;
 			}
 		}
 
 		.content {
-			padding:50rpx 0;
+			padding: 50rpx 0;
 		}
 
 		.count {
-			color:#999;
+			color: #999;
 			font-size: 28rpx;
 		}
 	}
