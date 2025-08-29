@@ -265,7 +265,14 @@
 
 	// 返回
 	const goBack = () => {
-		uni.navigateBack()
+		uni.navigateBack({
+			// 分享朋友圈，返回失败，跳转首页
+			fail: (e) => {
+				uni.reLaunch({
+					url: "/pages/index/index"
+				})
+			}
+		})
 	}
 
 	// 下载
