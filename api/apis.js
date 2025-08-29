@@ -49,11 +49,18 @@ export function apiGetSetupScore(data = {}) {
 	})
 }
 
-
 // 壁纸下载
 export function apiWriteDownload(data = {}) {
 	return request({
 		url: "/downloadWall",
+		data
+	})
+}
+
+// 单个壁纸详情
+export function apiDetailWall(data = {}) {
+	return request({
+		url: "/detailWall",
 		data
 	})
 }

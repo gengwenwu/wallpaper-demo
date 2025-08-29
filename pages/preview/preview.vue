@@ -15,7 +15,7 @@
 			<view class="count">{{currentIndex+1}} / {{ classList.length }}</view>
 			<view class="time"><uni-dateformat :date="new Date()" format="hh:mm" /></view>
 			<view class="date"><uni-dateformat :date="new Date()" format="MM月dd日" /></view>
-			<view class="footer" >
+			<view class="footer">
 				<view class="box" @click="clickInfo">
 					<uni-icons type="info" size="23"></uni-icons>
 					<view class="text">信息</view>
@@ -44,7 +44,7 @@
 					</view>
 				</view>
 				<scroll-view scroll-y>
-					<view class="content" >
+					<view class="content">
 						<view class="row">
 							<text class="label">壁纸ID：</text>
 							<text class="value" selectable>{{currentInfo._id}}</text>
@@ -119,12 +119,15 @@
 	} from "@/utils/system.js"
 
 	import {
-		onLoad
+		onLoad,
+		onShareAppMessage,
+		onShareTimeline
 	} from "@dcloudio/uni-app"
 
 	import {
 		apiGetSetupScore,
-		apiWriteDownload
+		apiWriteDownload,
+		apiDetailWall
 	} from "@/api/apis.js"
 
 	const maskState = ref(true)
@@ -157,9 +160,23 @@
 	const currentIndex = ref(0)
 
 	//  页面加载
-	onLoad((e) => {
+	onLoad(async (e) => {
 		// 获取id参数
 		currentId.value = e.id
+
+		// 分享图片使用网络的
+		if ("share" == e.type) {
+			let res = await apiDetailWall({
+				id: currentId.value
+			})
+			classList.value = res.data.map((item) => {
+				return {
+					...item,
+					picurl: item.smallPicurl.replace("_small.webp", ".jpg")
+				}
+			})
+		}
+
 		// 查找对应图片
 		currentIndex.value = classList.value.findIndex((item) => item._id == currentId.value)
 		// 当前显示的信息
@@ -278,7 +295,7 @@
 			})
 
 			console.log(res);
-			
+
 			// 出现异常，抛出异常，在catch中处理
 			if (res.errCode != 0) throw res
 
@@ -364,6 +381,30 @@
 		readImgs.value = [...new Set(readImgs.value)]
 		// console.log("readImgs", readImgs.value);
 	}
+
+	// 分享给好友
+	onShareAppMessage((e) => {
+		return {
+			title: "咸虾米壁纸",
+			// 分享好友传递参数
+			path: "/pages/preview/preview?id=" + currentId.value + "&type=share"
+		}
+	})
+
+	// 分享朋友圈
+	onShareTimeline(() => {
+		return {
+			title: "咸虾米壁纸",
+			// 网络图、本地图均可。注意：
+			// 1，图片是1:1比例
+			// 2，本地图片使用static目录的，放在common中的，打包后，会拿不到图片
+			// 3, 分享朋友圈，参数imageUrl也可以不要写
+			imageUrl: "/static/images/xxmLogo.png",
+			// imageUrl: bannerList.value[0].picurl
+			// 朋友圈传参，不要带path
+			query: "id=" + currentId.value + "&type=share"
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

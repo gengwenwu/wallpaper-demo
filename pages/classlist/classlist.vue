@@ -35,7 +35,9 @@
 
 	import {
 		onLoad,
-		onReachBottom
+		onReachBottom,
+		onShareAppMessage,
+		onShareTimeline
 	} from "@dcloudio/uni-app"
 
 	// 列表数据
@@ -48,10 +50,13 @@
 
 	const noData = ref(false)
 
+	let pageName = null
+
 	// onLoad 接收参数
 	onLoad((e) => {
 		// id
 		queryParams.classid = e.id
+		pageName = e.name
 
 		// 标题
 		uni.setNavigationBarTitle({
@@ -82,6 +87,30 @@
 
 		uni.setStorageSync("storageClassList", classList.value)
 	}
+
+	// 分享给好友
+	onShareAppMessage((e) => {
+		return {
+			title: "咸虾米壁纸-" + pageName,
+			// 分享好友传递参数
+			path: "/pages/classify/classify?id=" + queryParams.classid + "&name=" + pageName
+		}
+	})
+
+	// 分享朋友圈
+	onShareTimeline(() => {
+		return {
+			title: "咸虾米壁纸-" + pageName,
+			// 网络图、本地图均可。注意：
+			// 1，图片是1:1比例
+			// 2，本地图片使用static目录的，放在common中的，打包后，会拿不到图片
+			// 3, 分享朋友圈，参数imageUrl也可以不要写
+			imageUrl: "/static/images/xxmLogo.png",
+			// imageUrl: bannerList.value[0].picurl
+			// 朋友圈传参，不要带path
+			query: "id=" + queryParams.classid + "&name=" + pageName
+		}
+	})
 </script>
 
 <style lang="scss" scoped>
