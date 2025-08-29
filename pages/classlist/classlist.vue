@@ -35,6 +35,7 @@
 
 	import {
 		onLoad,
+		onUnload,
 		onReachBottom,
 		onShareAppMessage,
 		onShareTimeline
@@ -110,6 +111,13 @@
 			// 朋友圈传参，不要带path
 			query: "id=" + queryParams.classid + "&name=" + pageName
 		}
+	})
+
+	// 卸载
+	onUnload(() => {
+		
+		// 清除缓存
+		uni.removeStorageSync("storageClassList")
 	})
 </script>
 
