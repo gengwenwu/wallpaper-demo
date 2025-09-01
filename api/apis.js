@@ -88,3 +88,12 @@ export function apiWallNewsDetail(data = {}) {
 		data
 	})
 }
+
+
+// 搜索壁纸
+export function apiSearchWall(data = {}) {
+	return request({
+		url: "/searchWall",
+		data
+	})
+}

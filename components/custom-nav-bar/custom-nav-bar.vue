@@ -6,16 +6,16 @@
 			<!-- 2，自定义bar头部 -->
 			<view class="titleBar" :style="{height: getTitleBarHeight()+'px'}">
 				<view class="title">{{title}}</view>
-				<view class="search">
+				<navigator class="search" url="/pages/search/search">
 					<uni-icons class="icon" type="search" color="#888" size="18"></uni-icons>
 					<text class="text">搜索</text>
-				</view>
+				</navigator>
 			</view>
 		</view>
+	</view>
 
-		<view class="fill" :style="{height:getNaBarHeight() + 'px'}">
+	<view class="fill" :style="{height:getNaBarHeight() + 'px'}">
 
-		</view>
 	</view>
 </template>
 
