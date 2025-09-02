@@ -18,7 +18,9 @@
 					</view>
 				</view>
 				<view class="tabs">
-					<view class="tab" v-for="tab in historySearch" :key="tab" @click="clickTab(tab)"> {{tab}}</view>
+					<view class="tab" v-for="tab in historySearch" :key="tab" @click="clickTab(tab)">
+						{{tab}}
+					</view>
 				</view>
 			</view>
 
@@ -28,7 +30,9 @@
 					<view class="text">热门搜索</view>
 				</view>
 				<view class="tabs">
-					<view class="tab" v-for="tab in recommendList" :key="tab" @click="clickTab(tab)">{{tab}}</view>
+					<view class="tab" v-for="tab in recommendList" :key="tab" @click="clickTab(tab)">
+						{{tab}}
+					</view>
 				</view>
 			</view>
 		</view>
